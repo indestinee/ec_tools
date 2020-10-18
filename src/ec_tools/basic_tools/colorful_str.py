@@ -1,4 +1,5 @@
-import ec_tools
+from ec_tools.basic_tools.replace_dict import ReplaceDict
+from ec_tools import basic_tools
 
 
 class ColorfulStr:
@@ -24,12 +25,12 @@ class ColorfulStr:
             for k, v in self.colors.items()
         }
         table['(#)'] = self.default
-        self.replace_colors = ec_tools.ReplaceDict(table)
-        self.clean_colors = ec_tools.ReplaceDict({k: '' for k in table.keys()})
+        self.replace_colors = ReplaceDict(table)
+        self.clean_colors = ReplaceDict({k: '' for k in table.keys()})
         self.done = self('(#g)done(#)')
 
     def __call__(self, *args) -> str:
-        output = ec_tools.basic_tools.touch_suffix(
+        output = basic_tools.touch_suffix(
             ' '.join(map('{}'.format, args)), '(#)')
         output = self.replace_colors.replace(output)
         return output

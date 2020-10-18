@@ -5,6 +5,7 @@ with open('README.md', 'r') as fh:
 
 packages = {
     'ec_tools': 'src/ec_tools',
+    'ec_tools.basic_tools': 'src/ec_tools/basic_tools',
 }
 
 setuptools.setup(
