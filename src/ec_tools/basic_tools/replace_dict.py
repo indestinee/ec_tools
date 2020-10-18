@@ -3,11 +3,11 @@ import re
 
 class ReplaceDict:
     """Replaces a series of keys to values."""
-    def __init__(self, rep_dict: dict):
-        """Initialize the pattern.
 
-        Args:
-            rep_dict: A dict, in which all keys and values must be str.
+    def __init__(self, rep_dict: dict):
+        """
+
+        :param rep_dict: A dict, in which all keys and values must be str.
         """
         self.rep_dict = rep_dict
         self.pattern = re.compile(
