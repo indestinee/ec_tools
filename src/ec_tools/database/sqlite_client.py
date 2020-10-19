@@ -26,7 +26,7 @@ class SqliteClient(DatabaseClientInterface):
             self.conn.commit()
             return result
         except Exception as e:
-            self.logger.error(e)
+            self.logger.print_exception()
             raise e
         finally:
             self.lock.release()
