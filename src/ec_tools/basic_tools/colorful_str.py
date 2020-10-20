@@ -52,7 +52,7 @@ class ColorfulStr:
 
     def clean(self, *args) -> str:
         output = ' '.join(map('{}'.format, args))
-        return self.replace_colors.replace(output)
+        return self.clean_colors.replace(output)
 
 
 colorful_str = ColorfulStr()

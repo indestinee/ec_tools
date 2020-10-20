@@ -6,4 +6,6 @@ build/
 dist/
 ec_tools.egg-info/
 
+upload.sh
 .*swp
+
