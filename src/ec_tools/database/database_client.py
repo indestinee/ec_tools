@@ -1,9 +1,16 @@
-class DatabaseClient:
+import abc
+
+
+class DatabaseClientInterface(metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
     def __init__(self):
         pass
 
+    @abc.abstractmethod
     def execute(self, *args, **kwargs):
-        raise NotImplementedError
+        pass
 
+    @abc.abstractmethod
     def commit(self):
-        raise NotImplementedError
+        pass

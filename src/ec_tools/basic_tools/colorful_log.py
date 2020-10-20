@@ -56,4 +56,4 @@ class ColorfulLog(logging.Logger):
             create_stream_handle(level=log_level, formatter=log_formatter))
 
 
-logger = ColorfulLog(log_dir=None, log_name='ec_tools')
+ec_tools_local_logger = ColorfulLog(log_dir=None, log_name='ec_tools')

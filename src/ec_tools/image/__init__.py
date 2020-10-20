@@ -1,8 +1,8 @@
 import numpy as np
-import cv2
 
 
 def bytes_to_img(data: bytes) -> np.ndarray:
+    import cv2
     np_arr = np.frombuffer(data, np.uint8)
     img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
     return img

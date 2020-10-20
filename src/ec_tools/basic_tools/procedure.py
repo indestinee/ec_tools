@@ -2,11 +2,11 @@ import datetime
 import time
 
 import ec_tools
-from ec_tools.basic_tools.colorful_log import logger
+from ec_tools.basic_tools.colorful_log import ec_tools_local_logger
 
 
 class Procedure:
-    def __init__(self, msg: str, logger=logger):
+    def __init__(self, msg: str, logger=ec_tools_local_logger):
         self.logger = logger
         self.logs = [msg]
         self.time = time.time()
