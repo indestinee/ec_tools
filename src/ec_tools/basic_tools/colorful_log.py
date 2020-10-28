@@ -1,5 +1,7 @@
 import logging
 import os
+import sys
+from traceback import TracebackException
 
 from ec_tools.basic_tools.colorful_str import colorful_str
 from ec_tools import basic_tools
@@ -54,6 +56,12 @@ class ColorfulLog(logging.Logger):
                                    formatter=log_formatter))
         self.addHandler(
             create_stream_handle(level=log_level, formatter=log_formatter))
+
+    def print_exception(self, limit=None, chain=True):
+        etype, value, tb = sys.exc_info()
+        msg = '\n'.join(TracebackException(type(value), value, tb, limit=limit).format(chain=chain))
+        self.error(msg)
+        self.error(etype)
 
 
 ec_tools_local_logger = ColorfulLog(log_dir=None, log_name='ec_tools')

@@ -18,15 +18,9 @@ class SqliteClient(DatabaseClientInterface):
         self.conn.commit()
 
     def execute(self, *args, **kwargs):
-        try:
-            self.lock.acquire()
+        with self.lock:
             result = self.cursor.execute(*args, **kwargs)
             if isinstance(result, sqlite3.Cursor):
                 result = result.fetchall()
-            self.conn.commit()
+            self.commit()
             return result
-        except Exception as e:
-            self.logger.error(e)
-            raise e
-        finally:
-            self.lock.release()
