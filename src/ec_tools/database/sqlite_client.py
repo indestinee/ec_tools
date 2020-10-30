@@ -13,6 +13,7 @@ class SqliteClient(DatabaseClientInterface):
         self.cursor = self.conn.cursor()
         self.lock = threading.Lock()
         self.logger = logger
+        self.execute("PRAGMA FOREIGN_KEYS=ON")
 
     def commit(self):
         self.conn.commit()
