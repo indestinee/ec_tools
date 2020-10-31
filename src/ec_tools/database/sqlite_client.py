@@ -18,10 +18,22 @@ class SqliteClient(DatabaseClientInterface):
     def commit(self):
         self.conn.commit()
 
-    def execute(self, *args, **kwargs):
+    def execute(self, sqls, args=[]):
         with self.lock:
-            result = self.cursor.execute(*args, **kwargs)
-            if isinstance(result, sqlite3.Cursor):
-                result = result.fetchall()
+            if isinstance(sqls, str):
+                return self._execute_one(sqls, args)
+            num_q = sum([sql.count('?') for sql in sqls])
+            assert num_q == len(args), 'num(?) != len(args): {} != {}'.format(num_q, len(args))
+            start_index, results = 0, []
+            for sql in sqls:
+                params_cnt = sql.count('?')
+                result = self._execute_one(sql, args[start_index: start_index + params_cnt])
+                results.append(result)
+                start_index += params_cnt
             self.commit()
-            return result
+
+    def _execute_one(self, sql, args):
+        result = self.cursor.execute(sql, args)
+        if isinstance(result, sqlite3.Cursor):
+            result = result.fetchall()
+        return result
