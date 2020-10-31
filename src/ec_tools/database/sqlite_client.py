@@ -21,7 +21,9 @@ class SqliteClient(DatabaseClientInterface):
     def execute(self, sqls, args=[]):
         with self.lock:
             if isinstance(sqls, str):
-                return self._execute_one(sqls, args)
+                result = self._execute_one(sqls, args)
+                self.commit()
+                return result
             num_q = sum([sql.count('?') for sql in sqls])
             assert num_q == len(args), 'num(?) != len(args): {} != {}'.format(num_q, len(args))
             start_index, results = 0, []
