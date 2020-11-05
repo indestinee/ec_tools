@@ -4,12 +4,16 @@ from ec_tools import basic_tools
 from ec_tools.database.database_client import DatabaseClientInterface
 from ec_tools.basic_tools.colorful_log import ec_tools_local_logger
 
+DICT_FACTORY = lambda cursor, row: {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+
 
 class SqliteClient(DatabaseClientInterface):
-    def __init__(self, name, logger=ec_tools_local_logger):
+    def __init__(self, name, logger=ec_tools_local_logger, return_dict=False):
         super().__init__()
         self.db_name = basic_tools.touch_suffix(name, '.db')
         self.conn = sqlite3.connect(self.db_name, check_same_thread=False)
+        if return_dict:
+            self.conn.row_factory = DICT_FACTORY
         self.cursor = self.conn.cursor()
         self.lock = threading.Lock()
         self.logger = logger
@@ -18,7 +22,9 @@ class SqliteClient(DatabaseClientInterface):
     def commit(self):
         self.conn.commit()
 
-    def execute(self, sqls, args=[]):
+    def execute(self, sqls, args=None):
+        if args is None:
+            args = []
         with self.lock:
             if isinstance(sqls, str):
                 result = self._execute_one(sqls, args)

@@ -13,7 +13,7 @@ packages = {
 
 setuptools.setup(
     name='ec_tools',
-    version='0.6',
+    version='0.7',
     packages=packages.keys(),
     package_dir=packages,
     url='http://github.com/indestinee/ec_tools',
