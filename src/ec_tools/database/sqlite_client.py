@@ -39,6 +39,7 @@ class SqliteClient(DatabaseClientInterface):
                     results.append(result)
                     start_index += params_cnt
                 self.commit()
+                return results
 
     def __execute_one(self, sql, args):
         try:
