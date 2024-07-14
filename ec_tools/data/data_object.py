@@ -77,6 +77,11 @@ class Formatter:
             for each in clazz:
                 if each.name == value:
                     return each
+            raise FormatErrorException(
+                self.class_name,
+                self.field,
+                f"unknown value {value} found in enum {clazz}",
+            )
         raise FormatErrorException(
             self.class_name, self.field, f"unknown type {clazz} to format"
         )
