@@ -13,7 +13,11 @@ class FormatErrorException(Exception):
     message: str
 
     def __repr__(self):
-        return f'{self.message}: {self.class_name}#{self.field.name} is not serializable, try to add function "_load__{self.field.name}" with "@classmethod"to {self.class_name}'
+        return (
+            f"{self.message}: {self.class_name}#{self.field.name} is not serializable, "
+            f'try to add function "_load__{self.field.name}" with '
+            f'"@classmethod" to {self.class_name}'
+        )
 
     def __str__(self):
         return self.__repr__()

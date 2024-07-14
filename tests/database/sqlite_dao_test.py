@@ -26,7 +26,7 @@ class Fruit(SqliteDataObject):
         return [["is_delicious", "price"], ["is_delicious", "weight"]]
 
 
-class SqliteDaoUnitTest(unittest.TestCase):
+class SqliteDaoTest(unittest.TestCase):
     sqlite_client = SqliteClient(":memory:")
     sqlite_dao = SqliteDao[Fruit](sqlite_client, Fruit)
 

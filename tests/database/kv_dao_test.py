@@ -7,7 +7,7 @@ from ec_tools.database import SqliteKvDao, SqliteClient
 logging.basicConfig(level=logging.DEBUG)
 
 
-class KvDaoUnitTest(unittest.TestCase):
+class KvDaoTest(unittest.TestCase):
     sqlite_client = SqliteClient(":memory:")
     kv_dao = SqliteKvDao(sqlite_client)
 
