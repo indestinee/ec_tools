@@ -8,3 +8,4 @@ from .sqlite_dao.sqlite_query_generator import SqliteQueryGenerator
 from .kv_dao.kv_dao import KvDao, ONE_THOUSAND_YEAR
 from .kv_dao.kv_data import KvData
 from .kv_dao.sqlite_kv_dao import SqliteKvDao
+from .kv_dao.cipher_kv_dao import CipherKvDao

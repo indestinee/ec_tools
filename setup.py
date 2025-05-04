@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="ec_tools",
-    version="2.5",
+    version="2.6",
     description="EC Tools",
     packages=setuptools.find_packages(exclude=["tests", "tests.*"]),
     install_requires=["dataclasses", "typing"],

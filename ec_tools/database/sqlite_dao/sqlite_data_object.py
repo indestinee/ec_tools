@@ -21,8 +21,7 @@ class SqliteDataObject(abc.ABC, DataObject):
 
     @classmethod
     @abc.abstractmethod
-    def primary_keys(cls) -> List[str]:
-        ...
+    def primary_keys(cls) -> List[str]: ...
 
     @classmethod
     def extra_indexes(cls) -> List[List[str]]:
