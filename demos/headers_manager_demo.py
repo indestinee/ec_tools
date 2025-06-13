@@ -1,6 +1,4 @@
 import logging
-import time
-import unittest
 
 from ec_tools.database import SqliteKvDao, SqliteClient, CipherKvDao
 from ec_tools.tools.cipher import AesCipherGenerator

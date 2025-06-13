@@ -3,7 +3,14 @@ import enum
 import json
 from typing import Any, Dict, List, Callable, get_origin, get_args, Set
 
-from ec_tools.utils.io_utils import CustomizedJsonEncoder
+
+class CustomizedJsonEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, set):
+            return list(o)
+        if isinstance(o, enum.Enum):
+            return o.name
+        return json.JSONEncoder.default(self, o)
 
 
 @dataclasses.dataclass
@@ -91,7 +98,7 @@ class Formatter:
             return value
         if self.field and self.field.default_factory != dataclasses.MISSING:
             return self.field.default_factory()
-        elif self.field and self.field.default != dataclasses.MISSING:
+        if self.field and self.field.default != dataclasses.MISSING:
             return self.field.default
         return None
 
@@ -118,7 +125,7 @@ class DataObject:
 
     @classmethod
     def from_json(cls, json_obj: Dict[str, Any]):
-        function_mapping = cls._customized_mapping_function("_load__")
+        function_mapping = cls._customized_load_function("_load__")
         return cls(
             **{
                 field.name: function_mapping[field.name](json_obj.get(field.name, None))
@@ -127,15 +134,22 @@ class DataObject:
         )
 
     def to_json(self) -> Dict[str, Any]:
-        return json.loads(self.to_json_str())
+        default_json = json.loads(self.to_json_str())
+        function_mapping = self._customized_dump_function("_dump__")
+        return {
+            field.name: (
+                function_mapping[field.name](self.__dict__[field.name])
+                if function_mapping[field.name]
+                else default_json.get(field.name)
+            )
+            for field in self.fields()
+        }
 
     def to_json_str(self) -> str:
         return json.dumps(dataclasses.asdict(self), cls=CustomizedJsonEncoder)
 
     @classmethod
-    def _customized_mapping_function(
-        cls, prefix: str
-    ) -> Dict[str, Callable[[Any], Any]]:
+    def _customized_load_function(cls, prefix: str) -> Dict[str, Callable[[Any], Any]]:
         all_functions = {
             item: getattr(cls, item)
             for item in dir(cls)
@@ -147,4 +161,18 @@ class DataObject:
                 Formatter(class_name=cls.__name__, field=field).format_field,
             )
             for field in cls.fields()
+        }
+
+    @classmethod
+    def _customized_dump_function(
+        cls,
+        prefix: str,
+    ) -> Dict[str, Callable[[Any], Any]]:
+        all_functions = {
+            item: getattr(cls, item)
+            for item in dir(cls)
+            if isinstance(getattr(cls, item), Callable) and item.startswith(prefix)
+        }
+        return {
+            field.name: all_functions.get(prefix + field.name) for field in cls.fields()
         }

@@ -12,28 +12,25 @@ class CustomThreadPoolExecutor(ThreadPoolExecutor):
         max_workers=None,
         thread_name_prefix="",
         initializer=None,
+        ignore_exception: bool = False,
         initargs=(),
     ):
         self.futures = []
+        self.ignore_exception = ignore_exception
         super().__init__(max_workers, thread_name_prefix, initializer, initargs)
 
-    def submit(self, fn, ignore_exception: bool = False, **kwargs):
-        future = super().submit(
-            self.try_execute, func=fn, ignore_exception=ignore_exception, **kwargs
-        )
+    def submit(self, fn, /, *args, **kwargs):
+        future = super().submit(self.try_execute, func=fn, *args, **kwargs)
         self.futures.append(future)
         return future
 
-    @classmethod
-    def try_execute(
-        cls, func: Callable, ignore_exception: bool, **kwargs
-    ) -> Optional[Any]:
+    def try_execute(self, func: Callable, *args, **kwargs) -> Optional[Any]:
         try:
-            return func(**kwargs)
+            return func(*args, **kwargs)
         except Exception as e:
-            if not ignore_exception:
+            if not self.ignore_exception:
                 raise e
-            logging.error(f"[ThreadPool] try to run failed with %s", e)
+            logging.error("[ThreadPool] try to run failed with %s", e)
             return None
 
     def join(self, log_time: int = 5, clear_after_wait: bool = True) -> List[Any]:
@@ -58,8 +55,3 @@ class CustomThreadPoolExecutor(ThreadPoolExecutor):
             self.futures.clear()
         logging.info("[ThreadPool] all futures complete")
         return results
-
-    def __del__(self):
-        logging.info("[ThreadPool] stopping")
-        self.join()
-        logging.info("[ThreadPool] stopped")

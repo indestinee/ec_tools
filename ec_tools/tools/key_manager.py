@@ -1,23 +1,19 @@
 import dataclasses
-import logging
-import os
 import threading
-import time
-from copy import deepcopy
 from typing import Dict, Optional, Callable, List
 
 from ec_tools.database import CipherKvDao
 
 
 def _collect_user_input(field: str, retries: int = 10) -> str:
-    for i in range(retries):
+    for _ in range(retries):
         try:
             value = input(f"Enter field {field}: ")
             value = value.strip()
             if not value:
                 continue
             return value
-        except Exception as e:
+        except Exception:
             continue
     raise RuntimeError(f"Failed to input {field}")
 

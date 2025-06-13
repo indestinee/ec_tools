@@ -1,6 +1,5 @@
 import dataclasses
 import enum
-import json
 import unittest
 from typing import List
 

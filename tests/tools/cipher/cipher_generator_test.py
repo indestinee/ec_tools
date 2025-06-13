@@ -1,9 +1,8 @@
 import logging
-import time
 import os
 import unittest
 
-from ec_tools.tools.cipher import AesCipherGenerator, Cipher, CipherGenerator, AesMode
+from ec_tools.tools.cipher import AesCipherGenerator, CipherGenerator, AesMode
 
 logging.basicConfig(level=logging.DEBUG)
 
