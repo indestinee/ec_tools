@@ -1,5 +1,6 @@
-import dataclasses
 import abc
+import dataclasses
+
 from ec_tools.tools.cipher.cipher import Cipher
 
 

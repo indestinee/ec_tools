@@ -1,11 +1,12 @@
-import os
-import hashlib
 import dataclasses
+import os
+
 from Crypto.Cipher import AES
 
-from ec_tools.tools.cipher.cipher import Cipher, SecrectKey
-from ec_tools.tools.cipher.cipher_generator.cipher_generator import CipherGenerator
+from ec_tools.tools.cipher import password_tool
 from ec_tools.tools.cipher.aes_config import AesMode
+from ec_tools.tools.cipher.cipher import Cipher
+from ec_tools.tools.cipher.cipher_generator.cipher_generator import CipherGenerator
 
 
 @dataclasses.dataclass
@@ -47,15 +48,10 @@ class AesCipherGenerator(CipherGenerator):
         return mixture
 
     def _generate_key(self, password: bytes, salt: bytes):
-        hsh = hashlib.pbkdf2_hmac(
-            "sha512",
+        return password_tool.generate_key(
             password,
             salt,
+            self.mode.value.key_size,
+            self.mode.value.iv_size,
             self.pbkdf2_iterations,
-            dklen=self.mode.value.key_size + self.mode.value.iv_size,
-        )
-        return SecrectKey(
-            key=hsh[: self.mode.value.key_size],
-            iv=hsh[self.mode.value.key_size :],
-            salt=salt,
         )

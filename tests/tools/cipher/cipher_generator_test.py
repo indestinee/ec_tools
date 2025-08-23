@@ -2,7 +2,7 @@ import logging
 import os
 import unittest
 
-from ec_tools.tools.cipher import AesCipherGenerator, CipherGenerator, AesMode
+from ec_tools.tools.cipher import AesCipherGenerator, AesMode, CipherGenerator
 
 logging.basicConfig(level=logging.DEBUG)
 

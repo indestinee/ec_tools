@@ -1,9 +1,20 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Generator, List, Optional
 
 
 def remove_none_from_dict(obj: Dict[str, Any]) -> Dict[str, Any]:
     return {k: v for k, v in obj.items() if v is not None}
+
+
+def get_batch(generator: Generator, batch_size: int) -> Generator[List, None, None]:
+    batch = []
+    for item in generator:
+        batch.append(item)
+        if len(batch) >= batch_size:
+            yield batch
+            batch = []
+    if batch:
+        yield batch
 
 
 def get_logger(

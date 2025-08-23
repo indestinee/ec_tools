@@ -1,6 +1,6 @@
 import dataclasses
 import unittest
-from typing import List, Dict, Union, Any
+from typing import Any, Dict, List, Union
 
 from ec_tools.data import DataObject
 
@@ -40,10 +40,7 @@ class DataObjectUnionTest(unittest.TestCase):
         b_json = {"a": [{"1": {"x": 1, "y": "2"}}]}
         with self.assertRaises(Exception) as e:
             B.from_json(b_json)
-            self.assertTrue(
-                'A#y is not serializable, try to add function "_load__y" with "@classmethod" to A'
-                in e
-            )
+            self.assertTrue('A#y is not serializable, try to add function "_load__y" with "@classmethod" to A' in e)
 
     def test_load(self):
         d_json = {"c": [{"1": {"x": 1, "y": "2"}}]}

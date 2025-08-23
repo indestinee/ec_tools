@@ -1,7 +1,7 @@
 import logging
 import time
-from concurrent.futures import ThreadPoolExecutor, Future
-from typing import List, Callable, Any, Optional
+from concurrent.futures import Future, ThreadPoolExecutor
+from typing import Any, Callable, List, Optional
 
 
 class CustomThreadPoolExecutor(ThreadPoolExecutor):

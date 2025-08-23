@@ -1,8 +1,17 @@
 import json
 import os
+from io import TextIOWrapper
+from typing import Generator, List
 
-from typing import List
-from ec_tools.data import JsonType, CustomizedJsonEncoder
+from ec_tools.data import CustomizedJsonEncoder, JsonType
+
+
+def chunk_read_file(fp: TextIOWrapper, chunk_size: int = 1024 * 1024) -> Generator[str, None, None]:
+    while True:
+        chunk = fp.read(chunk_size)
+        if not chunk:
+            break
+        yield chunk
 
 
 def load_json(path: str, default: JsonType = None, encoding: str = "utf-8") -> JsonType:

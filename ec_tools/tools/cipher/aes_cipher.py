@@ -1,10 +1,10 @@
-import hashlib
-import os
 import dataclasses
+import os
 
 from Crypto.Cipher import AES
-from ec_tools.tools.cipher.cipher import SecrectKey
+
 from ec_tools.tools.cipher.aes_config import AesMode
+from ec_tools.tools.cipher.password_tool import generate_key, generate_password
 
 
 @dataclasses.dataclass
@@ -46,10 +46,7 @@ class AesCipher:
                 os.urandom(self.aes_mode.value.key_size),
                 data,
                 os.urandom(self.aes_mode.value.key_size),
-                os.urandom(
-                    self.aes_mode.value.key_size
-                    - len(data) % self.aes_mode.value.key_size
-                ),
+                os.urandom(self.aes_mode.value.key_size - len(data) % self.aes_mode.value.key_size),
             ]
         )
 
@@ -58,23 +55,13 @@ class AesCipher:
 
     @classmethod
     def generate_password(cls, password: str, salt: str, iterations: int) -> bytes:
-        return hashlib.pbkdf2_hmac(
-            "sha512",
-            password.encode("utf-8"),
-            bytes.fromhex(salt),
-            iterations,
-        )
+        return generate_password(password, salt, iterations)
 
     def generate_key(self, password: bytes, salt: bytes, iterations: int):
-        hsh = hashlib.pbkdf2_hmac(
-            "sha512",
+        return generate_key(
             password,
             salt,
+            self.aes_mode.value.key_size,
+            self.aes_mode.value.iv_size,
             iterations,
-            dklen=self.aes_mode.value.key_size + self.aes_mode.value.iv_size,
-        )
-        return SecrectKey(
-            key=hsh[: self.aes_mode.value.key_size],
-            iv=hsh[self.aes_mode.value.key_size :],
-            salt=salt,
         )

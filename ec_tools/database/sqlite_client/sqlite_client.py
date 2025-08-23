@@ -18,9 +18,7 @@ class SqliteClient:
     def __init__(self, db_path: str):
         self._db_path = db_path
         self._conn = sqlite3.connect(db_path, check_same_thread=False)
-        self._conn.row_factory = lambda cursor, row: {
-            col[0]: row[idx] for idx, col in enumerate(cursor.description)
-        }
+        self._conn.row_factory = lambda cursor, row: {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
         self._cursor = self._conn.cursor()
         self._lock = threading.Lock()
         self._cursor.execute("PRAGMA foreign_keys = ON")
@@ -32,10 +30,7 @@ class SqliteClient:
     def execute(self, *queries: SqliteQuery, commit=True):
         _ = [self._logger.debug("SQL: %s", query) for query in queries]
         with self._lock:
-            results = [
-                self._cursor.execute(query.sql, query.args).fetchall()
-                for query in queries
-            ]
+            results = [self._cursor.execute(query.sql, query.args).fetchall() for query in queries]
             if commit:
                 self._conn.commit()
             return results

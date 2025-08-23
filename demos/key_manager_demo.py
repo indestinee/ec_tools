@@ -1,6 +1,6 @@
 import logging
 
-from ec_tools.database import SqliteKvDao, SqliteClient, CipherKvDao
+from ec_tools.database import CipherKvDao, SqliteClient, SqliteKvDao
 from ec_tools.tools.cipher import AesCipherGenerator
 from ec_tools.tools.key_manager import KeyManager
 

@@ -12,15 +12,11 @@ class IoTest(unittest.TestCase):
         )
         self.assertEqual(
             {},
-            io_utils.load_json(
-                os.path.join(os.path.dirname(__file__), "test_not_exist.json"), {}
-            ),
+            io_utils.load_json(os.path.join(os.path.dirname(__file__), "test_not_exist.json"), {}),
         )
         self.assertRaises(
             IOError,
-            lambda: io_utils.load_json(
-                os.path.join(os.path.dirname(__file__), "test_not_exist.json")
-            ),
+            lambda: io_utils.load_json(os.path.join(os.path.dirname(__file__), "test_not_exist.json")),
         )
 
 

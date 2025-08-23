@@ -1,6 +1,7 @@
-import dataclasses
 import copy
+import dataclasses
 from typing import Dict, List
+
 from ec_tools.tools.key_manager import KeyManager
 
 

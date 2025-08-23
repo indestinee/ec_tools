@@ -1,6 +1,6 @@
 import dataclasses
 import unittest
-from typing import List, Dict, Optional, Set
+from typing import Dict, List, Optional, Set
 
 from ec_tools.data import DataObject
 

@@ -1,5 +1,5 @@
 import dataclasses
-from typing import List, Any, Type, Dict, Collection
+from typing import Any, Collection, Dict, List, Type
 
 from ec_tools.database.sqlite_client.sqlite_query import SqliteQuery
 from ec_tools.database.sqlite_dao.sqlite_data_object import SqliteDataObject
@@ -13,9 +13,9 @@ class SqliteQueryGenerator:
     _unique_keys: List[List[str]]
     _field_names: List[str]
 
-    def __init__(self, clz: Type[SqliteDataObject]):
+    def __init__(self, clz: Type[SqliteDataObject], table_name: str):
         self._data_type = clz
-        self._table_name = clz.table_name()
+        self._table_name = table_name
         self._primary_keys = clz.primary_keys()
         self._unique_keys = clz.unique_keys()
         self._field_names = clz.field_names()
@@ -45,17 +45,13 @@ class SqliteQueryGenerator:
     def drop_table_sql(self) -> SqliteQuery:
         return SqliteQuery(f"DROP TABLE IF EXISTS {self._table_name}")
 
-    def insert_sql(
-        self, objs: Collection[SqliteDataObject], supplement: str = ""
-    ) -> SqliteQuery:
+    def insert_sql(self, objs: Collection[SqliteDataObject], supplement: str = "") -> SqliteQuery:
         items = [obj.to_json() for obj in objs]
         return SqliteQuery(
             f"INSERT {supplement} INTO {self._table_name}",
             f"({', '.join(self._field_names)})",
             f"VALUES ({', '.join('?' * len(self._field_names))})",
-            args=[
-                [item[field_name] for field_name in self._field_names] for item in items
-            ],
+            args=[[item[field_name] for field_name in self._field_names] for item in items],
         )
 
     def query_by_values_sql(
@@ -123,15 +119,12 @@ class SqliteQueryGenerator:
         if not self._unique_keys:
             return []
         return [
-            f"CONSTRAINT {'__'.join(['unique', *unique])} UNIQUE ({', '.join(unique)})"
-            for unique in self._unique_keys
+            f"CONSTRAINT {'__'.join(['unique', *unique])} UNIQUE ({', '.join(unique)})" for unique in self._unique_keys
         ]
 
     # avoid injection or unexpected behavior
     def _filter_keys(self, keys: Collection[str], strict: bool = True):
         if strict:
             unexpected_keys = [key for key in keys if key not in self._field_names]
-            assert (
-                len(unexpected_keys) == 0
-            ), f"unexpected keys found: {unexpected_keys}"
+            assert len(unexpected_keys) == 0, f"unexpected keys found: {unexpected_keys}"
         return [key for key in keys if key in self._field_names]

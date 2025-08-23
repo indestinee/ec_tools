@@ -1,6 +1,6 @@
 import dataclasses
 import threading
-from typing import Dict, Optional, Callable, List
+from typing import Callable, Dict, List, Optional
 
 from ec_tools.database import CipherKvDao
 

@@ -1,5 +1,5 @@
 import abc
-from typing import Any
+from typing import Any, List
 
 ONE_THOUSAND_YEAR = 86400 * 365 * 1000
 
@@ -15,6 +15,8 @@ class KvDao(abc.ABC):
 
     def set(self, key: str, value: str, duration: float = None) -> None:
         self._set(key, value, duration or self._default_duration)
+
+    def keys(self) -> List[str]: ...
 
     @abc.abstractmethod
     def delete(self, key: str) -> None: ...

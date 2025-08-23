@@ -1,5 +1,3 @@
-from typing import Union, List, Dict, TypeAlias
+from typing import Dict, List, TypeAlias, Union
 
-JsonType: TypeAlias = Union[
-    None, int, str, bool, float, List["JsonType"], Dict[str, "JsonType"]
-]
+JsonType: TypeAlias = Union[None, int, str, bool, float, List["JsonType"], Dict[str, "JsonType"]]
