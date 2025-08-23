@@ -1,6 +1,5 @@
 import dataclasses
 import enum
-import json
 import unittest
 from typing import List
 
@@ -26,6 +25,6 @@ class DataObjectEnumTest(unittest.TestCase):
     def test_enums(self):
         a = Sea([SeaAnimalType.FISH, SeaAnimalType.SHRIMP])
         a_json = a.to_json()
-        aa = Sea.from_json(a_json)
         self.assertEqual({"animals": ["FISH", "SHRIMP"]}, a_json)
+        aa = Sea.from_json(a_json)
         self.assertEqual(a, aa)

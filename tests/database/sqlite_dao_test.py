@@ -4,7 +4,7 @@ import time
 import unittest
 from typing import List
 
-from ec_tools.database import SqliteDataObject, SqliteClient, SqliteDao
+from ec_tools.database import SqliteClient, SqliteDao, SqliteDataObject
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -36,12 +36,8 @@ class SqliteDaoTest(unittest.TestCase):
         self.sqlite_dao.create_table()
         result = self.sqlite_dao.insert(
             [
-                Fruit(
-                    name="apple", weight=1.1, price=1, is_delicious=True, remaining=1
-                ),
-                Fruit(
-                    name="banana", weight=0.1, price=0, is_delicious=False, remaining=0
-                ),
+                Fruit(name="apple", weight=1.1, price=1, is_delicious=True, remaining=1),
+                Fruit(name="banana", weight=0.1, price=0, is_delicious=False, remaining=0),
             ]
         )
         logging.info("insert result: %s", result)

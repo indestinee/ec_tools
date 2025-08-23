@@ -2,7 +2,7 @@ import logging
 import time
 import unittest
 
-from ec_tools.database import SqliteKvDao, SqliteClient
+from ec_tools.database import SqliteClient, SqliteKvDao
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -36,6 +36,8 @@ class KvDaoTest(unittest.TestCase):
         self.assertEqual(self.kv_dao.get("hi"), "how are you")
         self.assertEqual(self.kv_dao.get("hello"), None)
 
+        self.assertEqual(self.kv_dao.keys(), ["hi"])
         # delete hi
         self.kv_dao.delete("hi")
         self.assertEqual(self.kv_dao.get("hi"), None)
+        self.assertEqual(self.kv_dao.keys(), [])

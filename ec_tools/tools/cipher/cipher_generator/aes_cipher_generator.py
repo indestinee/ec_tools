@@ -1,25 +1,12 @@
-import json
-import os
-import hashlib
 import dataclasses
-import enum
+import os
+
 from Crypto.Cipher import AES
 
-from ec_tools.utils.hash_utils import hmac_sha256
-from ec_tools.tools.cipher.cipher_generator import Cipher, CipherGenerator, SecrectKey
-
-
-@dataclasses.dataclass
-class AesConfig:
-    key_size: int
-    iv_size: int
-    mode: int
-
-
-class AesMode(enum.Enum):
-    AES_128_CBC = AesConfig(16, 16, AES.MODE_CBC)
-    AES_192_CBC = AesConfig(24, 16, AES.MODE_CBC)
-    AES_256_CBC = AesConfig(32, 16, AES.MODE_CBC)
+from ec_tools.tools.cipher import password_tool
+from ec_tools.tools.cipher.aes_config import AesMode
+from ec_tools.tools.cipher.cipher import Cipher
+from ec_tools.tools.cipher.cipher_generator.cipher_generator import CipherGenerator
 
 
 @dataclasses.dataclass
@@ -54,22 +41,17 @@ class AesCipherGenerator(CipherGenerator):
         )
 
     @classmethod
-    def _augment_bytes(self, data: bytes, padding_size: int) -> bytes:
+    def _augment_bytes(cls, data: bytes, padding_size: int) -> bytes:
         padded_text = (data + os.urandom(padding_size - len(data) % padding_size)).hex()
         random_bytes = os.urandom(len(padded_text)).hex()
         mixture = bytes.fromhex("".join(map("".join, zip(padded_text, random_bytes))))
         return mixture
 
     def _generate_key(self, password: bytes, salt: bytes):
-        hsh = hashlib.pbkdf2_hmac(
-            "sha512",
+        return password_tool.generate_key(
             password,
             salt,
+            self.mode.value.key_size,
+            self.mode.value.iv_size,
             self.pbkdf2_iterations,
-            dklen=self.mode.value.key_size + self.mode.value.iv_size,
-        )
-        return SecrectKey(
-            key=hsh[: self.mode.value.key_size],
-            iv=hsh[self.mode.value.key_size :],
-            salt=salt,
         )

@@ -1,5 +1,5 @@
 import os
-from typing import Set, Callable, List
+from typing import Callable, List, Set
 
 
 def list_files(path: str, eligible: Callable[[str], bool]) -> List[str]:

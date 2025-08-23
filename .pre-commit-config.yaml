@@ -1,0 +1,31 @@
+repos:
+  # --- isort: import sorter ---
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--line-length", "120"]
+  # --- autoflake: remove unused imports/vars ---
+  - repo: https://github.com/myint/autoflake
+    rev: v2.3.1
+    hooks:
+      - id: autoflake
+        args: [
+          "--in-place",
+          "--remove-unused-variables",
+          "--remove-all-unused-imports",
+        ]
+        exclude: "__init__.py"
+  # --- Black: Python code formatter ---
+  - repo: https://github.com/psf/black
+    rev: 24.8.0   # use a stable release
+    hooks:
+      - id: black
+        language_version: python3
+        args: ["--line-length=120"]
+  # --- YAML lint/format ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+

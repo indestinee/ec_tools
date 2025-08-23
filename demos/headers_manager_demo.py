@@ -1,12 +1,9 @@
 import logging
-import time
-import unittest
 
-from ec_tools.database import SqliteKvDao, SqliteClient, CipherKvDao
+from ec_tools.database import CipherKvDao, SqliteClient, SqliteKvDao
 from ec_tools.tools.cipher import AesCipherGenerator
-from ec_tools.tools.key_manager import KeyManager
-
 from ec_tools.tools.headers_manager import HeadersManager
+from ec_tools.tools.key_manager import KeyManager
 
 logging.basicConfig(level=logging.DEBUG)
 
