@@ -2,7 +2,10 @@ import os
 
 from ec_tools.tools.cipher.aes_config import AesMode
 from ec_tools.tools.cipher.chunk_config import ChunkConfig
-from ec_tools.tools.cipher.chunk_encryption_utils import decrypt_by_chunk, encrypt_by_chunk
+from ec_tools.tools.cipher.chunk_encryption_utils import (
+    decrypt_by_chunk,
+    encrypt_by_chunk,
+)
 from ec_tools.utils.io_utils import chunk_read_file
 
 
