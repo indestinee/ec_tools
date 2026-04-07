@@ -10,14 +10,35 @@ A lightweight Python toolbox for data modeling, SQLite DAOs, encrypted key-value
 - Utility helpers for IO, hashing, logging, and timing.
 
 ## Requirements
-- Python >= 3.12
+- Python >= 3.11
+- `uv` for dependency and environment management
 
-## Install (from source)
+## Install
+
+### With `uv` (recommended)
+```bash
+uv sync
+```
+
+This creates a project-managed virtual environment from `pyproject.toml` and `uv.lock`.
+
+For development tools such as `pytest`, `black`, `pre-commit`, and `twine`:
+```bash
+uv sync --group dev
+```
+
+### Editable install with `pip`
+If you prefer a traditional virtualenv workflow:
 ```bash
 pip install -e .
 ```
 
-## Quick start
+To install the project with development extras:
+```bash
+pip install -e ".[dev]"
+```
+
+## Quick Start
 ### Encrypted KV storage with a KeyManager
 ```python
 from ec_tools.database import CipherKvDao, SqliteClient, SqliteKvDao
@@ -43,7 +64,7 @@ print(headers)
 ```
 
 ## Data objects
-Define dataclasses that serialize to/from JSON with helpers for enums, lists, sets, and nested objects.
+Define dataclasses that serialize to/from JSON with helpers for enums, lists, sets, unions, and nested objects.
 ```python
 import dataclasses
 from ec_tools.data import DataObject
@@ -61,16 +82,32 @@ print(user.to_json())
 - `AesCipher` for encrypting/decrypting bytes.
 - Chunked and file-level encryption utilities in `ec_tools.tools.cipher`.
 
-## Project layout
+## Development
+Run the test suite:
+```bash
+uv run pytest
+```
+
+Format code:
+```bash
+uv run black .
+```
+
+Install pre-commit hooks:
+```bash
+uv run pre-commit install
+```
+
+Build distributions:
+```bash
+uv build
+```
+
+## Project Layout
 - `ec_tools/data`: data-object helpers and JSON formatting.
 - `ec_tools/database`: SQLite client, DAO, and KV DAO.
 - `ec_tools/tools`: key/headers managers, cipher tools, thread pool.
 - `ec_tools/utils`: IO, hashing, logging, and timing helpers.
-
-## Development
-```bash
-pytest
-```
 
 ## License
 MIT
